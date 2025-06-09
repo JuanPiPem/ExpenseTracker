@@ -1,20 +1,19 @@
-// client/src/App.jsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import ExpenseList from "./components/ExpenseList.jsx";
+import AddExpenseForm from "./components/AddExpenseForm.jsx";
 
 const App = () => {
-  const [message, setMessage] = useState("Loading...");
+  const [refresh, setRefresh] = useState(false);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/expenses")
-      .then((res) => res.text())
-      .then((data) => setMessage(data))
-      .catch((err) => setMessage("Error: " + err.message));
-  }, []);
+  const handleAddExpense = () => {
+    setRefresh(!refresh); // fuerza refetch en ExpenseList
+  };
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial" }}>
       <h1>Expense Tracker</h1>
-      <p>{message}</p>
+      <AddExpenseForm onAdd={handleAddExpense} />
+      <ExpenseList refresh={refresh} />
     </div>
   );
 };
