@@ -1,20 +1,35 @@
-import { useState } from "react";
+// src/App.jsx
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 import ExpenseList from "./components/ExpenseList.jsx";
 import AddExpenseForm from "./components/AddExpenseForm.jsx";
 
-const App = () => {
-  const [refresh, setRefresh] = useState(false);
-
-  const handleAddExpense = () => {
-    setRefresh(!refresh);
-  };
-
+const Home = () => {
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>Expenses Tracker</h1>
-      <AddExpenseForm onAdd={handleAddExpense} />
-      <ExpenseList refresh={refresh} />
+    <div className="p-8 font-sans">
+      <h1 className="text-2xl font-bold mb-4">Expenses Tracker</h1>
+      <AddExpenseForm onAdd={() => {}} />
+      <ExpenseList refresh={false} />
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 };
 
