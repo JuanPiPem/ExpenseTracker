@@ -27,19 +27,19 @@ const AddExpenseForm = ({ onAdd }) => {
     <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
       <input
         type="text"
-        placeholder="Descripción"
+        placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
       />
       <input
         type="number"
-        placeholder="Monto"
+        placeholder="Amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         required
       />
-      <button type="submit">Agregar</button>
+      <button type="submit">Add</button>
     </form>
   );
 };

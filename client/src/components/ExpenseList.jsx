@@ -9,7 +9,8 @@ const ExpenseList = ({ refresh }) => {
     const fetchExpenses = async () => {
       try {
         const res = await axios.get("/api/expenses");
-        setExpenses(res.data);
+
+        setExpenses(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Error fetching expenses:", err);
       } finally {

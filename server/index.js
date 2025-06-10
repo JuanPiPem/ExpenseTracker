@@ -1,9 +1,8 @@
-// server/index.js
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import expenseRoutes from "./routes/expenses.js";
+import expenseRoutes from "./routes/expensesRoutes.js";
 
 dotenv.config();
 const app = express();
