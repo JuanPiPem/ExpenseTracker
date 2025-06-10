@@ -25,7 +25,7 @@ const ExpenseList = ({ refresh }) => {
 
   return (
     <div>
-      <h2>Expenses</h2>
+      <h2 className="text-xl font-bold mb-4">Expenses</h2>
       <ul>
         {expenses.map((exp, index) => (
           <li key={index}>
