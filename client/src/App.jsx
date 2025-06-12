@@ -9,6 +9,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ExpenseList from "./components/ExpenseList.jsx";
 import AddExpenseForm from "./components/AddExpenseForm.jsx";
+import PrivateRoute from "./components/PrivateRoute";
 
 const Home = () => {
   return (
@@ -27,7 +28,14 @@ const App = () => {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
