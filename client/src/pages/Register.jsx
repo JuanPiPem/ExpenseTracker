@@ -20,9 +20,13 @@ const Register = () => {
     }
   };
 
+  const handleGoogleRegister = () => {
+    console.log("Google Register clicked");
+  };
+
   return (
     <AuthLayout>
-      <h2 className="text-2xl font-bold mb-16  text-green-700 ">ExpeTrack</h2>
+      <h2 className="text-2xl font-bold mb-16 text-green-700">ExpeTrack</h2>
       <form
         onSubmit={handleSubmit}
         className="bg-gray-100 p-8 rounded shadow-md w-full max-w-md"
@@ -30,6 +34,7 @@ const Register = () => {
         <h2 className="text-2xl text-gray-500 font-bold mb-6 text-center">
           Register
         </h2>
+
         {err && <p className="text-red-500 mb-4 text-sm">{err}</p>}
         <input
           type="email"
@@ -51,6 +56,26 @@ const Register = () => {
         >
           Register
         </button>
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-t border-gray-300" />
+          <span className="mx-2 text-gray-500 text-sm font-medium">OR</span>
+          <hr className="flex-grow border-t border-gray-300" />
+        </div>
+        <button
+          type="button"
+          onClick={handleGoogleRegister}
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 px-4 rounded hover:bg-gray-200 transition mt-4"
+        >
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
+          <span className="text-sm text-gray-700 font-medium">
+            Continue with Google
+          </span>
+        </button>
+
         <p className="text-sm mt-4 text-center">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-600 hover:underline">
