@@ -43,6 +43,7 @@ const Register = () => {
         {err && <p className="text-red-500 mb-4 text-sm">{err}</p>}
         <input
           type="email"
+          autoComplete="email"
           placeholder="Email"
           className="w-full mb-4 p-2 border rounded"
           value={email}

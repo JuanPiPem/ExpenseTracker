@@ -11,10 +11,20 @@ const AddExpenseForm = ({ onAdd }) => {
     if (!description || !amount) return;
 
     try {
-      const res = await axios.post("/api/expenses", {
-        description,
-        amount: parseFloat(amount),
-      });
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "/api/expenses",
+        {
+          description,
+          amount: parseFloat(amount),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       onAdd(res.data); // notifica al padre
       setDescription("");
       setAmount("");

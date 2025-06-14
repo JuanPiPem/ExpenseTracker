@@ -8,7 +8,12 @@ const ExpenseList = ({ refresh }) => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const res = await axios.get("/api/expenses");
+        const token = localStorage.getItem("token");
+        const res = await axios.get("/api/expenses", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setExpenses(Array.isArray(res.data) ? res.data : []);
       } catch (err) {

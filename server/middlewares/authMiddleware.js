@@ -1,20 +1,19 @@
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+// server/middleware/authMiddleware.js
+import admin from "../firebase/admin.js";
 
-export const protect = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+export const authenticateToken = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Bearer <token>
 
-  if (!authHeader?.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "No token provided" });
+  if (!token) {
+    return res.status(401).json({ error: "Missing token" });
   }
 
   try {
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.user = await User.findById(decoded.id).select("-password");
+    const decoded = await admin.auth().verifyIdToken(token);
+    req.user = decoded;
     next();
-  } catch (err) {
-    res.status(401).json({ error: "Token not valid" });
+  } catch (error) {
+    console.error("Token verification failed:", error);
+    res.status(401).json({ error: "Invalid or expired token" });
   }
 };
