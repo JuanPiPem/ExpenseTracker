@@ -50,6 +50,7 @@ const Register = () => {
         />
         <input
           type="password"
+          autoComplete="new-password"
           placeholder="Password"
           className="w-full mb-4 p-2 border rounded"
           value={password}
