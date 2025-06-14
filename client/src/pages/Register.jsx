@@ -1,7 +1,7 @@
 // src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { fakeAuth } from "../utils/auth";
+import { firebaseAuth } from "../utils/auth";
 import AuthLayout from "../components/AuthLayout";
 
 const Register = () => {
@@ -13,15 +13,20 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fakeAuth.register({ email, password });
+      await firebaseAuth.register({ email, password });
       navigate("/login");
     } catch (error) {
       setErr(error);
     }
   };
 
-  const handleGoogleRegister = () => {
-    console.log("Google Register clicked");
+  const handleGoogleRegister = async () => {
+    try {
+      await firebaseAuth.loginWithGoogle(); // Google ya maneja registro/login
+      navigate("/home");
+    } catch (error) {
+      setErr(error);
+    }
   };
 
   return (

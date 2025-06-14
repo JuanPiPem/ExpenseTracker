@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { fakeAuth } from "../utils/auth";
+import { firebaseAuth } from "../utils/auth";
 import AuthLayout from "../components/AuthLayout";
 
 const Login = () => {
@@ -13,16 +13,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fakeAuth.login({ email, password });
-      navigate("/");
+      await firebaseAuth.login({ email, password });
+      navigate("/home");
     } catch (error) {
       setErr(error);
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google Login clicked");
-    // acá después agregamos la lógica real
+  const handleGoogleLogin = async () => {
+    try {
+      await firebaseAuth.loginWithGoogle();
+      navigate("/home");
+    } catch (error) {
+      setErr(error);
+    }
   };
 
   return (
@@ -36,6 +40,7 @@ const Login = () => {
         {err && <p className="text-red-500 mb-4 text-sm">{err}</p>}
         <input
           type="email"
+          autoComplete="email"
           placeholder="Email"
           className="w-full mb-4 p-2 border rounded"
           value={email}
@@ -43,6 +48,7 @@ const Login = () => {
         />
         <input
           type="password"
+          autoComplete="current-password"
           placeholder="Password"
           className="w-full mb-4 p-2 border rounded"
           value={password}
