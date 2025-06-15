@@ -1,4 +1,3 @@
-// en src/api/axiosConfig.js (crear este archivo)
 import axios from "axios";
 
 const instance = axios.create({

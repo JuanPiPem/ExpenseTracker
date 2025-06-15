@@ -1,10 +1,10 @@
-// src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { firebaseAuth } from "../utils/auth";
 import AuthLayout from "../components/AuthLayout";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState(null);
@@ -12,8 +12,13 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!name) {
+      setErr("Name is required");
+      return;
+    }
+
     try {
-      await firebaseAuth.register({ email, password });
+      await firebaseAuth.register({ email, password, name });
       navigate("/login");
     } catch (error) {
       setErr(error);
@@ -22,7 +27,7 @@ const Register = () => {
 
   const handleGoogleRegister = async () => {
     try {
-      await firebaseAuth.loginWithGoogle(); // Google ya maneja registro/login
+      await firebaseAuth.loginWithGoogle();
       navigate("/home");
     } catch (error) {
       setErr(error);
@@ -41,6 +46,16 @@ const Register = () => {
         </h2>
 
         {err && <p className="text-red-500 mb-4 text-sm">{err}</p>}
+
+        <input
+          type="text"
+          autoComplete="name"
+          placeholder="Name"
+          className="w-full mb-4 p-2 border rounded"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
         <input
           type="email"
           autoComplete="email"
@@ -49,6 +64,7 @@ const Register = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <input
           type="password"
           autoComplete="new-password"
@@ -57,17 +73,20 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <button
           type="submit"
           className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
         >
           Register
         </button>
+
         <div className="flex items-center my-4">
           <hr className="flex-grow border-t border-gray-300" />
           <span className="mx-2 text-gray-500 text-sm font-medium">OR</span>
           <hr className="flex-grow border-t border-gray-300" />
         </div>
+
         <button
           type="button"
           onClick={handleGoogleRegister}

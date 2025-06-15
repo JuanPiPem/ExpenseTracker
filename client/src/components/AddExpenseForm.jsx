@@ -25,11 +25,11 @@ const AddExpenseForm = ({ onAdd }) => {
         }
       );
 
-      onAdd(res.data); // notifica al padre
+      onAdd(res.data);
       setDescription("");
       setAmount("");
     } catch (err) {
-      console.error("Error al agregar gasto:", err);
+      console.error("Err when adding expense:", err);
     }
   };
 
