@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+
 import expenseRoutes from "./routes/expensesRoutes.js";
+import incomeRoutes from "./routes/incomeRoutes.js"; // 👈 nuevo
+import summaryRoutes from "./routes/summaryRoutes.js"; // 👈 nuevo
 
 dotenv.config();
 const app = express();
@@ -11,6 +14,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/expenses", expenseRoutes);
+app.use("/api/incomes", incomeRoutes); // 👈 nuevo
+app.use("/api/summary", summaryRoutes); // 👈 nuevo
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;

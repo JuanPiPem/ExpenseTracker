@@ -7,7 +7,7 @@ import {
   getExpenseById,
 } from "../controllers/expensesControllers.js";
 import authenticateToken from "../middlewares/authenticateToken.js";
-import { validateExpense } from "../middlewares/validator.js";
+import { validateExpense } from "../middlewares/validators.js";
 const router = express.Router();
 
 router.get("/", authenticateToken, getExpenses);
