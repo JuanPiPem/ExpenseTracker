@@ -7,17 +7,23 @@ import {
   getExpenseById,
 } from "../controllers/expensesControllers.js";
 import authenticateToken from "../middlewares/authenticateToken.js";
-import { validateExpense } from "../middlewares/validators.js";
+import { validateExpense, validateMongoId } from "../middlewares/validators.js";
 const router = express.Router();
 
 router.get("/", authenticateToken, getExpenses);
 
-router.get("/:id", authenticateToken, getExpenseById);
+router.get("/:id", authenticateToken, validateMongoId, getExpenseById);
 
 router.post("/", authenticateToken, validateExpense, createExpense);
 
-router.put("/:id", authenticateToken, validateExpense, updateExpense);
+router.put(
+  "/:id",
+  authenticateToken,
+  validateMongoId,
+  validateExpense,
+  updateExpense
+);
 
-router.delete("/:id", authenticateToken, deleteExpense);
+router.delete("/:id", authenticateToken, validateMongoId, deleteExpense);
 
 export default router;

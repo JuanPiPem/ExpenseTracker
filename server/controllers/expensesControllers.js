@@ -2,9 +2,11 @@ import Expense from "../models/Expense.js";
 
 export const getExpenses = async (req, res) => {
   try {
+    console.log("User ID:", req.user?.uid);
     const expenses = await Expense.find({ userId: req.user.uid });
     res.json(expenses);
   } catch (error) {
+    console.error("getExpenses error:", error);
     res.status(500).json({ error: "Error fetching expenses" });
   }
 };

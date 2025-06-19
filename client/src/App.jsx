@@ -9,6 +9,11 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Home from "./pages/Home.jsx"; // 🎯 usar solo esta importación
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import { auth } from "./firebase"; // 👈 este es nuevo
+
+if (typeof window !== "undefined") {
+  window.auth = auth; // 👈 esto habilita usarlo en consola
+}
 
 const App = () => (
   <Router>
