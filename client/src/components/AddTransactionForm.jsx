@@ -58,7 +58,7 @@ const AddTransactionForm = ({ onAdd }) => {
           type="button"
           onClick={() => setType("Expense")}
           className={`flex items-center gap-2 px-4 py-2 rounded ${
-            type === "expense"
+            type === "Expense"
               ? "bg-red-100 text-red-700 font-semibold"
               : "bg-gray-100 text-gray-500"
           }`}

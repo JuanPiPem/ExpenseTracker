@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import TransactionList from "./TransactionList";
 
 const ExpenseList = ({ refresh }) => {
   const [expenses, setExpenses] = useState([]);
@@ -28,18 +29,7 @@ const ExpenseList = ({ refresh }) => {
 
   if (loading) return <p>Loading expenses...</p>;
 
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Expenses</h2>
-      <ul>
-        {expenses.map((exp, index) => (
-          <li key={index}>
-            {exp.description} - ${exp.amount}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return <TransactionList title="Expenses" data={expenses} type="expense" />;
 };
 
 export default ExpenseList;
