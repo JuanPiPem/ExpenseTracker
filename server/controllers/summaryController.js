@@ -10,10 +10,10 @@ export const getSummary = async (req, res) => {
     ]);
 
     const totalExpenses = expenses.reduce((acc, e) => acc + e.amount, 0);
-    const totalIncomes = incomes.reduce((acc, i) => acc + i.amount, 0);
-    const balance = totalIncomes - totalExpenses;
+    const totalIncome = incomes.reduce((acc, i) => acc + i.amount, 0);
+    const balance = totalIncome - totalExpenses;
 
-    res.json({ totalExpenses, totalIncomes, balance });
+    res.json({ totalExpenses, totalIncome, balance });
   } catch (error) {
     res.status(500).json({ error: "Error generating summary" });
   }

@@ -37,7 +37,7 @@ const AddExpenseForm = ({ onAdd }) => {
     <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
       <input
         type="text"
-        placeholder="Description"
+        placeholder="Expense Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
@@ -49,7 +49,7 @@ const AddExpenseForm = ({ onAdd }) => {
         onChange={(e) => setAmount(e.target.value)}
         required
       />
-      <button type="submit">Add</button>
+      <button type="submit">Add Expense</button>
     </form>
   );
 };
