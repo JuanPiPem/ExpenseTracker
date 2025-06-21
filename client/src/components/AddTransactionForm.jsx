@@ -1,13 +1,15 @@
 import { useState } from "react";
-import axiosInstance from "../api/axiosConfig.js";
 import { ArrowUpCircle, ArrowDownCircle, Plus } from "lucide-react";
+import useTransactionStore from "../stores/transactionStore.js";
 
-const AddTransactionForm = ({ onAdd }) => {
+const AddTransactionForm = () => {
   const [type, setType] = useState("Income");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const { addTransaction } = useTransactionStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,15 +18,12 @@ const AddTransactionForm = ({ onAdd }) => {
     setLoading(true);
     setError("");
 
-    const endpoint = type === "Income" ? "/api/incomes" : "/api/expenses";
-
     try {
-      const res = await axiosInstance.post(endpoint, {
+      await addTransaction(type.toLowerCase(), {
         description,
         amount: parseFloat(amount),
       });
 
-      onAdd(res.data);
       setDescription("");
       setAmount("");
     } catch (err) {

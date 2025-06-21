@@ -1,35 +1,22 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "../api/axiosConfig.js";
+import { useEffect } from "react";
 import TransactionList from "./TransactionList.jsx";
+import useTransactionStore from "../stores/transactionStore.js";
 
-const TransactionContainer = ({ type, refresh }) => {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+const TransactionContainer = ({ type }) => {
+  const { incomes, expenses, loading, error, fetchIncomes, fetchExpenses } =
+    useTransactionStore();
 
-  const endpoint = `/api/${type}s`;
+  const data = type === "income" ? incomes : expenses;
+  const isLoading = type === "income" ? loading.incomes : loading.expenses;
+  const errorMessage = type === "income" ? error.incomes : error.expenses;
+  const fetchData = type === "income" ? fetchIncomes : fetchExpenses;
   const title = type === "income" ? "Incomes" : "Expenses";
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        setLoading(true);
-        setError("");
+    fetchData();
+  }, [fetchData]);
 
-        const res = await axiosInstance.get(endpoint);
-        setTransactions(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
-        setError(err.response?.data?.error || `Error fetching ${type}s`);
-        console.error(`Error fetching ${type}s:`, err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTransactions();
-  }, [refresh, endpoint, type]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="mb-6">
         <h2 className="text-xl font-bold mb-4 text-gray-700">{title}</h2>
@@ -41,18 +28,18 @@ const TransactionContainer = ({ type, refresh }) => {
     );
   }
 
-  if (error) {
+  if (errorMessage) {
     return (
       <div className="mb-6">
         <h2 className="text-xl font-bold mb-4 text-gray-700">{title}</h2>
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
+          {errorMessage}
         </div>
       </div>
     );
   }
 
-  return <TransactionList title={title} data={transactions} type={type} />;
+  return <TransactionList title={title} data={data} type={type} />;
 };
 
 export default TransactionContainer;

@@ -1,32 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ArrowDownCircle, ArrowUpCircle, DollarSign } from "lucide-react";
-import axiosInstance from "../api/axiosConfig.js";
+import useTransactionStore from "../stores/transactionStore.js";
 
-const SummaryCard = ({ refresh }) => {
-  const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+const SummaryCard = () => {
+  const { summary, loading, error, fetchSummary } = useTransactionStore();
 
   useEffect(() => {
-    const fetchSummary = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const res = await axiosInstance.get("/api/summary");
-        setSummary(res.data);
-      } catch (err) {
-        setError(err.response?.data?.error || "Error fetching summary");
-        console.error("Error fetching summary:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSummary();
-  }, [refresh]);
+  }, [fetchSummary]);
 
-  if (loading) {
+  if (loading.summary) {
     return (
       <div className="grid grid-cols-3 gap-4 my-6">
         {[1, 2, 3].map((i) => (
@@ -43,10 +26,10 @@ const SummaryCard = ({ refresh }) => {
     );
   }
 
-  if (error) {
+  if (error.summary) {
     return (
       <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded my-6">
-        {error}
+        {error.summary}
       </div>
     );
   }

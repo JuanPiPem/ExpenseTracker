@@ -1,46 +1,58 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import { groupByDate } from "../utils/groupByDate";
+import useTransactionStore from "../stores/transactionStore.js";
 
 const TransactionTimeline = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { incomes, expenses, loading, error, fetchIncomes, fetchExpenses } =
+    useTransactionStore();
 
   useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const token = localStorage.getItem("token");
+    // Fetch both incomes and expenses if not already loaded
+    if (incomes.length === 0) fetchIncomes();
+    if (expenses.length === 0) fetchExpenses();
+  }, [fetchIncomes, fetchExpenses, incomes.length, expenses.length]);
 
-        const [incomeRes, expenseRes] = await Promise.all([
-          axios.get("/api/incomes", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("/api/expenses", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
+  const isLoading = loading.incomes || loading.expenses;
+  const hasError = error.incomes || error.expenses;
 
-        const merged = [
-          ...incomeRes.data.map((t) => ({ ...t, type: "income" })),
-          ...expenseRes.data.map((t) => ({ ...t, type: "expense" })),
-        ];
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="animate-pulse">
+            <div className="h-6 bg-gray-200 rounded mb-2 w-32"></div>
+            <div className="space-y-2">
+              {[1, 2].map((j) => (
+                <div key={j} className="h-12 bg-gray-100 rounded"></div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
-        // Ordenar por fecha descendente
-        merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (hasError) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        {error.incomes || error.expenses}
+      </div>
+    );
+  }
 
-        setTransactions(merged);
-      } catch (err) {
-        console.error("Error fetching transactions:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const transactions = [
+    ...incomes.map((t) => ({ ...t, type: "income" })),
+    ...expenses.map((t) => ({ ...t, type: "expense" })),
+  ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    fetchAll();
-  }, []);
-
-  if (loading) return <p>Loading timeline...</p>;
+  if (transactions.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        <p>No transactions found</p>
+      </div>
+    );
+  }
 
   const grouped = groupByDate(transactions);
 
@@ -52,7 +64,7 @@ const TransactionTimeline = () => {
           <ul className="space-y-2">
             {items.map((item, index) => (
               <li
-                key={index}
+                key={`${item._id || index}`}
                 className={`flex justify-between items-center p-3 rounded shadow ${
                   item.type === "income"
                     ? "bg-green-50 text-green-700"
