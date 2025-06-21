@@ -1,9 +1,7 @@
 import { useState } from "react";
-import ExpenseList from "../components/ExpenseList.jsx";
+import TransactionContainer from "../components/TransactionContainer.jsx";
 import Navbar from "../components/Navbar.jsx";
-import IncomeList from "../components/IncomeList.jsx";
 import AddTransactionForm from "../components/AddTransactionForm";
-
 import SummaryCard from "../components/SummaryCard.jsx";
 
 const Home = () => {
@@ -15,9 +13,9 @@ const Home = () => {
       <Navbar />
       <SummaryCard refresh={refresh} />
       <div className="grid md:grid-cols-3 gap-6">
-        <IncomeList refresh={refresh} />
-        <AddTransactionForm onAdd={() => setRefresh(!refresh)} />{" "}
-        <ExpenseList refresh={refresh} />
+        <TransactionContainer type="income" refresh={refresh} />
+        <AddTransactionForm onAdd={handleAdd} />
+        <TransactionContainer type="expense" refresh={refresh} />
       </div>
     </div>
   );

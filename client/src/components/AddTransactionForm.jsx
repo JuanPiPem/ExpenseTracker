@@ -1,38 +1,37 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosConfig.js";
 import { ArrowUpCircle, ArrowDownCircle, Plus } from "lucide-react";
 
 const AddTransactionForm = ({ onAdd }) => {
   const [type, setType] = useState("Income");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!description || !amount) return;
 
+    setLoading(true);
+    setError("");
+
     const endpoint = type === "Income" ? "/api/incomes" : "/api/expenses";
 
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post(
-        endpoint,
-        {
-          description,
-          amount: parseFloat(amount),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axiosInstance.post(endpoint, {
+        description,
+        amount: parseFloat(amount),
+      });
 
       onAdd(res.data);
       setDescription("");
       setAmount("");
     } catch (err) {
+      setError(err.response?.data?.error || "Failed to add transaction");
       console.error("Error adding transaction:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,6 +67,12 @@ const AddTransactionForm = ({ onAdd }) => {
         </button>
       </div>
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded">
+          {error}
+        </div>
+      )}
+
       <input
         type="text"
         placeholder="Description"
@@ -75,6 +80,7 @@ const AddTransactionForm = ({ onAdd }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
+        disabled={loading}
       />
       <input
         type="number"
@@ -83,15 +89,18 @@ const AddTransactionForm = ({ onAdd }) => {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         required
+        disabled={loading}
+        min="0"
+        step="0.01"
       />
       <div className="flex justify-center">
-        {" "}
         <button
           type="submit"
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          disabled={loading}
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Plus className="w-4 h-4" />
-          Add {type}
+          {loading ? "Adding..." : `Add ${type}`}
         </button>
       </div>
     </form>
