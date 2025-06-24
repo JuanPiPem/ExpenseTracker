@@ -19,7 +19,7 @@ const Register = () => {
 
     try {
       await firebaseAuth.register({ email, password, name });
-      navigate("/login");
+      navigate("/projects");
     } catch (error) {
       setErr(error);
     }
@@ -28,7 +28,7 @@ const Register = () => {
   const handleGoogleRegister = async () => {
     try {
       await firebaseAuth.loginWithGoogle();
-      navigate("/home");
+      navigate("/projects");
     } catch (error) {
       setErr(error);
     }

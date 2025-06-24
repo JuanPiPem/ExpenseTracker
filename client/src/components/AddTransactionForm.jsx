@@ -6,10 +6,27 @@ const AddTransactionForm = () => {
   const [type, setType] = useState("Income");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("other");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { addTransaction } = useTransactionStore();
+  const { addTransaction, currentProject } = useTransactionStore();
+
+  const incomeCategories = [
+    { value: "contribution", label: "Contribución" },
+    { value: "refund", label: "Reembolso" },
+    { value: "payment", label: "Pago" },
+    { value: "other", label: "Otro" },
+  ];
+
+  const expenseCategories = [
+    { value: "food", label: "Comida" },
+    { value: "transport", label: "Transporte" },
+    { value: "accommodation", label: "Alojamiento" },
+    { value: "entertainment", label: "Entretenimiento" },
+    { value: "supplies", label: "Suministros" },
+    { value: "other", label: "Otro" },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,13 +36,18 @@ const AddTransactionForm = () => {
     setError("");
 
     try {
-      await addTransaction(type.toLowerCase(), {
+      const transactionData = {
         description,
         amount: parseFloat(amount),
-      });
+        category,
+        ...(currentProject && { projectId: currentProject._id }),
+      };
+
+      await addTransaction(type.toLowerCase(), transactionData);
 
       setDescription("");
       setAmount("");
+      setCategory("other");
     } catch (err) {
       setError(err.response?.data?.error || "Failed to add transaction");
       console.error("Error adding transaction:", err);
@@ -81,6 +103,7 @@ const AddTransactionForm = () => {
         required
         disabled={loading}
       />
+
       <input
         type="number"
         placeholder="Amount"
@@ -92,6 +115,28 @@ const AddTransactionForm = () => {
         min="0"
         step="0.01"
       />
+
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="w-full border rounded p-2"
+        disabled={loading}
+      >
+        {(type === "Income" ? incomeCategories : expenseCategories).map(
+          (cat) => (
+            <option key={cat.value} value={cat.value}>
+              {cat.label}
+            </option>
+          )
+        )}
+      </select>
+
+      {currentProject && (
+        <div className="text-sm text-gray-600 bg-blue-50 p-2 rounded">
+          Proyecto: {currentProject.name}
+        </div>
+      )}
+
       <div className="flex justify-center">
         <button
           type="submit"

@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await firebaseAuth.login({ email, password });
-      navigate("/home");
+      navigate("/projects");
     } catch (error) {
       setErr(error);
     }
@@ -23,7 +23,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       await firebaseAuth.loginWithGoogle();
-      navigate("/home");
+      navigate("/projects");
     } catch (error) {
       setErr(error);
     }
@@ -81,7 +81,7 @@ const Login = () => {
         </button>
 
         <p className="text-sm mt-4 text-center">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link to="/register" className="text-blue-600 hover:underline">
             Register
           </Link>

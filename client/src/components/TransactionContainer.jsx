@@ -3,8 +3,15 @@ import TransactionList from "./TransactionList.jsx";
 import useTransactionStore from "../stores/transactionStore.js";
 
 const TransactionContainer = ({ type }) => {
-  const { incomes, expenses, loading, error, fetchIncomes, fetchExpenses } =
-    useTransactionStore();
+  const {
+    incomes,
+    expenses,
+    loading,
+    error,
+    fetchIncomes,
+    fetchExpenses,
+    currentProject,
+  } = useTransactionStore();
 
   const data = type === "income" ? incomes : expenses;
   const isLoading = type === "income" ? loading.incomes : loading.expenses;
@@ -13,8 +20,8 @@ const TransactionContainer = ({ type }) => {
   const title = type === "income" ? "Incomes" : "Expenses";
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData(currentProject?._id);
+  }, [fetchData, currentProject?._id]);
 
   if (isLoading) {
     return (

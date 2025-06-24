@@ -15,6 +15,23 @@ const expenseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    projectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+      required: false,
+    },
+    category: {
+      type: String,
+      enum: [
+        "food",
+        "transport",
+        "accommodation",
+        "entertainment",
+        "supplies",
+        "other",
+      ],
+      default: "other",
+    },
   },
   {
     timestamps: true,

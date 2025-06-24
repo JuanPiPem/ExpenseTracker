@@ -4,6 +4,7 @@ import {
   signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 
@@ -66,6 +67,11 @@ export const firebaseAuth = {
         password
       );
       const user = result.user;
+
+      // Update the user's displayName in Firebase
+      await updateProfile(user, {
+        displayName: name,
+      });
 
       const token = await user.getIdToken();
       // For registration, use the name field directly (first name only)

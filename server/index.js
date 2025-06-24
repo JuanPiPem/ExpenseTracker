@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import expenseRoutes from "./routes/expensesRoutes.js";
 import incomeRoutes from "./routes/incomeRoutes.js";
 import summaryRoutes from "./routes/summaryRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/incomes", incomeRoutes);
 app.use("/api/summary", summaryRoutes);
+app.use("/api/projects", projectRoutes);
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;

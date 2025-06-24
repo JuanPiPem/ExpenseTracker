@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-import Home from "./pages/Home.jsx"; // 🎯 usar solo esta importación
+import Projects from "./pages/Projects.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import { auth } from "./firebase"; // 👈 este es nuevo
 
@@ -18,14 +18,14 @@ if (typeof window !== "undefined") {
 const App = () => (
   <Router>
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Navigate to="/projects" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/home"
+        path="/projects"
         element={
           <PrivateRoute>
-            <Home />
+            <Projects />
           </PrivateRoute>
         }
       />

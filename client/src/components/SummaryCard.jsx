@@ -3,11 +3,12 @@ import { ArrowDownCircle, ArrowUpCircle, DollarSign } from "lucide-react";
 import useTransactionStore from "../stores/transactionStore.js";
 
 const SummaryCard = () => {
-  const { summary, loading, error, fetchSummary } = useTransactionStore();
+  const { summary, loading, error, fetchSummary, currentProject } =
+    useTransactionStore();
 
   useEffect(() => {
-    fetchSummary();
-  }, [fetchSummary]);
+    fetchSummary(currentProject?._id);
+  }, [fetchSummary, currentProject?._id]);
 
   if (loading.summary) {
     return (
@@ -42,7 +43,7 @@ const SummaryCard = () => {
     );
   }
 
-  const balance = summary.totalIncome - summary.totalExpenses;
+  const balance = (summary.totalIncome || 0) - (summary.totalExpenses || 0);
 
   return (
     <div className="grid grid-cols-3 gap-4 my-6">
@@ -50,7 +51,7 @@ const SummaryCard = () => {
         <ArrowDownCircle className="mx-auto text-green-600" size={32} />
         <p className="text-sm text-gray-600 mt-2">Income</p>
         <p className="text-lg font-bold text-green-700">
-          ${summary.totalIncome.toFixed(2)}
+          ${(summary.totalIncome || 0).toFixed(2)}
         </p>
       </div>
 
@@ -70,7 +71,7 @@ const SummaryCard = () => {
         <ArrowUpCircle className="mx-auto text-red-600" size={32} />
         <p className="text-sm text-gray-600 mt-2">Expenses</p>
         <p className="text-lg font-bold text-red-700">
-          ${summary.totalExpenses.toFixed(2)}
+          ${(summary.totalExpenses || 0).toFixed(2)}
         </p>
       </div>
     </div>
